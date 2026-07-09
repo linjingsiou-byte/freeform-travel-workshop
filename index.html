@@ -1,0 +1,2229 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>【下課花路米，暑假出發吧！】iPad 無邊記 × 完美自助旅行規劃術</title>
+  <!-- Google Fonts 引入優雅英文字體 Outfit 與中文字體 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       1. 設計系統與全域變數 (Design System & Variables)
+       ========================================================================== */
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: rgba(30, 41, 59, 0.45);
+      --card-bg-hover: rgba(30, 41, 59, 0.65);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-hover: rgba(56, 189, 248, 0.4);
+      
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      
+      --accent-blue: #38bdf8;
+      --accent-purple: #c084fc;
+      --accent-green: #34d399;
+      --accent-orange: #fb923c;
+      --accent-pink: #f472b6;
+      
+      --grad-primary: linear-gradient(135deg, #38bdf8 0%, #c084fc 100%);
+      --grad-blue: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+      --grad-green: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      --grad-orange: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      --grad-purple: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+      
+      --font-sans: 'Outfit', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    /* ==========================================================================
+       2. 基本樣式與版面重設 (Base Styles & Reset)
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      user-select: none;
+    }
+
+    a {
+      color: var(--accent-blue);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    a:hover {
+      color: var(--accent-purple);
+      text-decoration: underline;
+    }
+
+    /* ==========================================================================
+       3. 氛圍光效背景 (Ambient Glow Effects)
+       ========================================================================== */
+    .ambient-glows {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .glow-sphere {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(140px);
+      opacity: 0.18;
+      mix-blend-mode: screen;
+      animation: float-glow 25s infinite alternate ease-in-out;
+    }
+
+    .glow-1 {
+      top: -15%;
+      left: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--accent-blue) 0%, transparent 70%);
+    }
+
+    .glow-2 {
+      bottom: -15%;
+      right: -10%;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, var(--accent-purple) 0%, transparent 70%);
+      animation-delay: -5s;
+    }
+
+    .glow-3 {
+      top: 40%;
+      left: 60%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, var(--accent-pink) 0%, transparent 70%);
+      animation-delay: -10s;
+      opacity: 0.08;
+    }
+
+    @keyframes float-glow {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(80px, 50px) scale(1.15); }
+    }
+
+    /* ==========================================================================
+       4. 簡報核心容器與切換系統 (Presentation System Layout)
+       ========================================================================== */
+    .presentation-viewport {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+    }
+
+    .slides-container {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 4rem 6rem;
+      box-sizing: border-box;
+      position: relative;
+      opacity: 0.3;
+      transform: scale(0.96) translateY(8px);
+      filter: blur(4px);
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      filter: blur(0);
+    }
+
+    /* ==========================================================================
+       5. 簡報內元素排版 (Typography & Content Layout)
+          此處字型大小均遵守且超越 12pt (16px) 的全域限制
+       ========================================================================== */
+    
+    .slide h1.slide-title {
+      font-size: 2.8rem; /* 44.8px */
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 2rem;
+      text-align: center;
+      background: var(--grad-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+    }
+
+    .slide-subtitle {
+      font-size: 1.35rem; /* 21.6px */
+      color: var(--text-secondary);
+      margin-top: -1.5rem;
+      margin-bottom: 2.2rem;
+      font-weight: 400;
+      text-align: center;
+    }
+
+    /* 卡片與格狀排版 */
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      width: 100%;
+      max-width: 1150px;
+      align-items: stretch;
+    }
+
+    #review-slide .content-grid {
+      grid-template-columns: 1.15fr 0.85fr; /* 讓左邊圖片區寬一些，右邊文字卡片窄一些，使圖片視覺比例更協調 */
+      align-items: center;
+    }
+
+    .content-grid.three-cols {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 1.25rem;
+      padding: 2.2rem;
+      box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.25);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-6px);
+      background: var(--card-bg-hover);
+      border-color: var(--card-border-hover);
+      box-shadow: 0 15px 35px 0 rgba(56, 189, 248, 0.15);
+    }
+
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--grad-primary);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .glass-card:hover::before {
+      opacity: 1;
+    }
+
+    .glass-card.blue::before { background: var(--grad-blue); }
+    .glass-card.green::before { background: var(--grad-green); }
+    .glass-card.orange::before { background: var(--grad-orange); }
+    .glass-card.purple::before { background: var(--grad-purple); }
+
+    /* 文字樣式 */
+    .card-title {
+      font-size: 1.45rem; /* 23.2px */
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .card-title svg {
+      width: 1.65rem;
+      height: 1.65rem;
+      flex-shrink: 0;
+    }
+
+    .card-content {
+      font-size: 1.15rem; /* 18.4px */
+      line-height: 1.8;
+      color: var(--text-secondary);
+      flex-grow: 1;
+    }
+
+    .card-content ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .card-content li {
+      margin-bottom: 0.8rem;
+      position: relative;
+      padding-left: 1.4rem;
+    }
+
+    .card-content li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--accent-blue);
+      font-weight: bold;
+      font-size: 1.3rem;
+      line-height: 1;
+      top: 0.1rem;
+    }
+
+    .glass-card.blue li::before { color: var(--accent-blue); }
+    .glass-card.green li::before { color: var(--accent-green); }
+    .glass-card.orange li::before { color: var(--accent-orange); }
+    .glass-card.purple li::before { color: var(--accent-purple); }
+
+    /* 教育應用區塊 */
+    .edu-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 1rem;
+      background: rgba(192, 132, 252, 0.15);
+      border: 1px solid rgba(192, 132, 252, 0.3);
+      color: var(--accent-purple);
+      border-radius: 99px;
+      font-size: 1rem; /* 16px */
+      font-weight: 600;
+      margin-top: 1.2rem;
+      align-self: flex-start;
+    }
+
+    /* ==========================================================================
+       6. 互動視覺化圖卡 (Interactive Visual Cards)
+       ========================================================================== */
+    .visual-card-container {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1.25rem;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+      box-shadow: inset 0 4px 30px rgba(0, 0, 0, 0.3);
+      min-height: 300px;
+    }
+
+    /* 圖卡一：無邊記白板模擬 */
+    .freeform-board-mockup {
+      width: 100%;
+      height: 260px;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 0);
+      background-size: 20px 20px;
+      background-color: #111827;
+      border-radius: 0.75rem;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+    }
+
+    .sticky-note {
+      position: absolute;
+      width: 85px;
+      height: 85px;
+      padding: 0.5rem;
+      font-size: 0.9rem; /* 14.4px */
+      font-weight: 700;
+      color: #1e293b;
+      box-shadow: 2px 4px 10px rgba(0,0,0,0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .sticky-note:hover {
+      transform: scale(1.08) rotate(3deg) !important;
+      z-index: 10;
+    }
+
+    .sticky-yellow { background: #fef08a; transform: rotate(-3deg); top: 20px; left: 30px; }
+    .sticky-blue { background: #bae6fd; transform: rotate(4deg); top: 120px; left: 60px; }
+    .sticky-pink { background: #fbcfe8; transform: rotate(-2deg); top: 30px; right: 45px; }
+    .sticky-green { background: #bbf7d0; transform: rotate(1deg); top: 140px; right: 30px; }
+
+    /* 圖卡二：機票與預覽卡片模擬 */
+    .link-card-mockup {
+      width: 85%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    }
+
+    .web-preview-card {
+      background: #1e293b;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .web-preview-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-blue);
+      box-shadow: 0 5px 15px rgba(56, 189, 248, 0.2);
+    }
+
+    .web-preview-img {
+      height: 90px;
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 2.2rem;
+    }
+
+    .web-preview-info {
+      padding: 0.75rem;
+    }
+
+    .web-preview-title {
+      font-size: 0.95rem; /* 15.2px */
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.25rem;
+    }
+
+    .web-preview-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 圖卡三：地圖與門票模擬 */
+    .ticket-map-mockup {
+      display: flex;
+      gap: 1rem;
+      width: 90%;
+      height: 200px;
+    }
+
+    .mock-map {
+      flex: 1.2;
+      background: #1e293b;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mock-pin {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: #ef4444;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      box-shadow: -1px 1px 4px rgba(0,0,0,0.5);
+    }
+    
+    .pin-1 { top: 30%; left: 40%; }
+    .pin-2 { top: 60%; left: 70%; }
+
+    .mock-pin::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: white;
+      position: absolute;
+      border-radius: 50%;
+      top: 5px;
+      left: 5px;
+    }
+
+    .mock-ticket {
+      flex: 0.8;
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: white;
+      box-shadow: 4px 4px 15px rgba(234, 88, 12, 0.25);
+      position: relative;
+    }
+
+    .mock-ticket::before, .mock-ticket::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: var(--bg-color);
+      border-radius: 50%;
+      left: -8px;
+    }
+    .mock-ticket::before { top: 30%; }
+    .mock-ticket::after { bottom: 30%; }
+
+    /* 圖卡四：多人協作模擬 */
+    .collaboration-mockup {
+      width: 90%;
+      background: rgba(30, 41, 59, 0.6);
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 1rem;
+      position: relative;
+    }
+
+    .collab-user {
+      position: absolute;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      box-shadow: 2px 4px 10px rgba(0,0,0,0.3);
+      animation: cursor-float 3s infinite alternate ease-in-out;
+    }
+
+    .collab-user-1 {
+      background: var(--accent-blue);
+      top: 25px;
+      left: 35px;
+    }
+
+    .collab-user-2 {
+      background: var(--accent-purple);
+      bottom: 30px;
+      right: 40px;
+      animation-delay: -1.5s;
+    }
+
+    @keyframes cursor-float {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-6px) scale(1.03); }
+    }
+
+    /* 教學應用手繪感卡片 (Educational Design Cards) */
+    .edu-visual-card {
+      width: 100%;
+      height: 260px;
+      background: rgba(192, 132, 252, 0.05);
+      border: 2px dashed rgba(192, 132, 252, 0.25);
+      border-radius: 0.75rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .edu-icon-container {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgba(192, 132, 252, 0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      color: var(--accent-purple);
+      box-shadow: 0 0 15px rgba(192, 132, 252, 0.2);
+    }
+
+    .edu-icon-container svg {
+      width: 2.2rem;
+      height: 2.2rem;
+    }
+
+    .edu-visual-title {
+      font-size: 1.3rem; /* 20.8px */
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+
+    .edu-visual-desc {
+      font-size: 1rem; /* 16px */
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       7. 頁面專屬組件樣式 (Special Slide Components)
+       ========================================================================== */
+    
+    /* 封面頁 (Slide 1) */
+    .cover-container {
+      text-align: center;
+      max-width: 900px;
+      z-index: 10;
+    }
+
+    .cover-badge {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--accent-blue);
+      padding: 0.5rem 1.25rem;
+      border-radius: 99px;
+      font-size: 1.1rem; /* 17.6px */
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-bottom: 2rem;
+      display: inline-block;
+    }
+
+    .cover-title {
+      font-size: 4rem; /* 64px */
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #ffffff 40%, #a5f3fc 75%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.03em;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+    }
+
+    .cover-description {
+      font-size: 1.5rem; /* 24px */
+      color: var(--text-secondary);
+      max-width: 700px;
+      margin: 0 auto 3.5rem;
+      line-height: 1.6;
+    }
+
+    .cta-button {
+      background: var(--grad-primary);
+      color: white;
+      border: none;
+      font-size: 1.25rem; /* 20px */
+      font-weight: 700;
+      padding: 1.1rem 2.8rem;
+      border-radius: 99px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px 0 rgba(192, 132, 252, 0.35);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 15px 30px 0 rgba(192, 132, 252, 0.5);
+    }
+
+    .cta-button svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    .cta-button:hover svg {
+      transform: translateX(5px);
+    }
+
+    /* 時間軸/課程大綱 (Slide 3) */
+    .timeline {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 1100px;
+      position: relative;
+      margin-top: 2rem;
+    }
+
+    .timeline-line {
+      position: absolute;
+      top: 40px;
+      left: 5%;
+      right: 5%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 1;
+    }
+
+    .timeline-progress {
+      position: absolute;
+      top: 40px;
+      left: 5%;
+      width: 0%;
+      height: 4px;
+      background: var(--grad-primary);
+      z-index: 2;
+      transition: width 0.8s ease;
+    }
+
+    .timeline-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 15%;
+      position: relative;
+      z-index: 3;
+      cursor: pointer;
+    }
+
+    .timeline-dot {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #1e293b;
+      border: 3px solid rgba(255, 255, 255, 0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      transition: all 0.4s ease;
+    }
+
+    .timeline-node:hover .timeline-dot,
+    .timeline-node.active .timeline-dot {
+      background: var(--bg-color);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+      transform: scale(1.15);
+    }
+
+    .timeline-node.active .timeline-dot {
+      border-color: var(--accent-purple);
+      color: var(--accent-purple);
+      box-shadow: 0 0 20px rgba(192, 132, 252, 0.4);
+    }
+
+    .timeline-text {
+      text-align: center;
+      font-size: 1.05rem; /* 16.8px */
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: color 0.3s ease;
+    }
+
+    .timeline-node:hover .timeline-text,
+    .timeline-node.active .timeline-text {
+      color: var(--text-primary);
+    }
+
+    /* 比較表格 (Slide 13) */
+    .comparison-table {
+      width: 100%;
+      max-width: 1050px;
+      border-collapse: collapse;
+      background: rgba(30, 41, 59, 0.3);
+      backdrop-filter: blur(12px);
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      margin-top: 1rem;
+    }
+
+    .comparison-table th, 
+    .comparison-table td {
+      padding: 1.2rem 1.6rem;
+      text-align: left;
+      font-size: 1.15rem; /* 18.4px */
+    }
+
+    .comparison-table th {
+      background: rgba(15, 23, 42, 0.8);
+      font-weight: 700;
+      color: var(--text-primary);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .comparison-table td {
+      color: var(--text-secondary);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .comparison-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-primary);
+    }
+
+    /* 快捷鍵小抄 (Slide 16) */
+    .shortcut-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .shortcut-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 0.75rem;
+    }
+
+    .shortcut-key {
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      padding: 0.35rem 0.85rem;
+      font-family: monospace;
+      font-size: 1.1rem;
+      color: var(--accent-blue);
+      box-shadow: 0 3px 0 rgba(0,0,0,0.4);
+    }
+
+    .shortcut-desc {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    /* ==========================================================================
+       8. 簡報控制項 (Controls & Navigation UI)
+       ========================================================================== */
+    
+    /* 頂部進度條 */
+    .global-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 100;
+    }
+
+    .global-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--grad-primary);
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* 底部導覽列 */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 1.2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to top, rgba(11, 15, 25, 0.95), transparent);
+      z-index: 90;
+    }
+
+    .slide-counter {
+      font-size: 1.1rem; /* 17.6px */
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .slide-counter span {
+      color: var(--text-primary);
+    }
+
+    .chapter-select {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+      padding: 0.5rem 1.25rem;
+      border-radius: 99px;
+      font-size: 1rem; /* 16px */
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .chapter-select:hover {
+      border-color: var(--accent-blue);
+      color: var(--text-primary);
+    }
+
+    .control-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn-nav {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .btn-nav:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+      transform: scale(1.08);
+    }
+
+    .btn-nav svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      fill: currentColor;
+    }
+
+    .btn-nav:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+      transform: none;
+      background: transparent;
+    }
+
+    /* 自適應防呆與提示 */
+    .gesture-hint {
+      position: absolute;
+      bottom: 2rem;
+      right: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* 響應式微調 */
+    @media (max-width: 1024px) {
+      .slide {
+        padding: 3rem 4rem;
+      }
+      .slide h1.slide-title {
+        font-size: 2.2rem;
+      }
+      .content-grid {
+        gap: 1.5rem;
+      }
+    }
+
+    /* 針對高度較矮的螢幕（如 13 吋筆電、平板或投影機）進行垂直壓縮優化，防止標題被切邊 */
+    @media (max-height: 850px) {
+      .slide {
+        padding: 2.2rem 5rem 4.5rem 5rem; /* 增加底部 Padding 避免卡片底部與喇叭按鈕被固定導覽列遮擋 */
+      }
+      .slide h1.slide-title {
+        font-size: 2.1rem;
+        margin-bottom: 1rem;
+      }
+      .slide-subtitle {
+        font-size: 1.15rem;
+        margin-top: -0.75rem;
+        margin-bottom: 1.2rem;
+      }
+      .content-grid {
+        gap: 1.2rem;
+      }
+      .glass-card {
+        padding: 1.5rem;
+        border-radius: 1rem;
+      }
+      .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+      }
+      .card-content {
+        font-size: 1.05rem;
+        line-height: 1.6;
+      }
+      .card-content li {
+        margin-bottom: 0.4rem;
+      }
+      /* 優化圖片高度佔用 */
+      .slide img {
+        max-height: 42vh;
+        width: auto !important;
+        object-fit: contain;
+      }
+      /* 縮小 timeline 以防擠壓 */
+      .timeline {
+        margin-top: 1rem;
+      }
+      .timeline-dot {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 0.75rem;
+      }
+      .timeline-text {
+        font-size: 0.95rem;
+      }
+      /* 縮小手勢小抄項目 */
+      .shortcut-list {
+        gap: 1rem;
+      }
+      .shortcut-item {
+        padding: 0.9rem 1.5rem;
+      }
+      .shortcut-desc, .shortcut-key {
+        font-size: 1rem;
+      }
+      /* 縮小比較表格 */
+      .comparison-table th, 
+      .comparison-table td {
+        padding: 0.8rem 1.2rem;
+        font-size: 1.05rem;
+      }
+      /* 縮小加碼按鈕 */
+      .cta-button {
+        padding: 0.8rem 2.2rem;
+        font-size: 1.1rem;
+      }
+      .edu-badge {
+        margin-top: 0.8rem;
+        padding: 0.35rem 0.85rem;
+        font-size: 0.95rem;
+      }
+
+      /* 針對飯店實用英語頁面的特定垂直壓縮，防止高度溢出導致標題被切邊 */
+      #hotel-english-slide {
+        padding-top: 1.5rem;
+        padding-bottom: 3.5rem;
+      }
+      #hotel-english-slide .slide-title {
+        font-size: 2.05rem;
+        margin-bottom: 0.6rem;
+      }
+      #hotel-english-slide .slide-subtitle {
+        margin-bottom: 0.9rem;
+        font-size: 1.05rem;
+      }
+      #hotel-english-slide .glass-card {
+        padding: 1.2rem 1.6rem;
+      }
+      #hotel-english-slide li {
+        margin-bottom: 0.35rem !important;
+        line-height: 1.45 !important;
+      }
+      #hotel-english-slide li span {
+        font-size: 0.85rem !important;
+      }
+      #hotel-english-slide .speak-btn {
+        padding: 6px; /* 稍微縮小喇叭熱區至 6px 以節省行高 */
+        margin: -4px 4px -4px -2px;
+      }
+
+      /* 針對大複習頁面的圖片大小進行最佳化，使其與右側文字高度比例協調 */
+      #review-slide img {
+        max-height: 52vh; /* 放寬高度限制，使圖片大一些，視覺上更平衡 */
+      }
+      #review-slide .content-grid {
+        grid-template-columns: 1.15fr 0.85fr; /* 小螢幕也維持不對稱寬度比例 */
+        gap: 1.5rem;
+      }
+    }
+
+    /* 飯店英語發音喇叭按鈕樣式 */
+    .speak-btn {
+      background: transparent;
+      border: none;
+      color: var(--accent-blue);
+      cursor: pointer;
+      padding: 10px; /* 大幅擴大觸控熱區，符合 iPad 觸控規範 */
+      margin: -6px 4px -6px -2px; /* 以負外距抵消 padding 撐開行高的問題 */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border-radius: 50%;
+    }
+    .speak-btn:hover {
+      color: var(--accent-purple);
+      transform: scale(1.2);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .speak-btn:active {
+      transform: scale(0.9);
+    }
+    .speak-btn svg {
+      width: 1.15rem;
+      height: 1.15rem;
+      fill: none;
+      transition: stroke 0.2s ease;
+    }
+    .speak-btn.speaking {
+      color: var(--accent-green);
+      background: rgba(52, 211, 153, 0.15);
+      animation: pulse-speaker 1.2s infinite alternate ease-in-out;
+    }
+    @keyframes pulse-speaker {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.4); }
+      100% { transform: scale(1.15); box-shadow: 0 0 0 6px rgba(52, 211, 153, 0); }
+    }
+
+    /* ==========================================================================
+       10. 真正全響應式行動端與平板設計 (RWD Mobile & Tablet Support)
+       ========================================================================== */
+    @media (max-width: 900px) {
+      body {
+        overflow-y: auto !important; /* 允許垂直滾動以適應超高內容 */
+      }
+
+      .slide {
+        height: auto !important;
+        min-height: 100vh;
+        padding: 4rem 1.25rem 6.5rem 1.25rem !important; /* 縮小 Padding 給小螢幕 */
+        justify-content: flex-start; /* 靠頂部排版，便於向下滑動 */
+      }
+
+      /* 重塑格狀佈局為單欄 */
+      .content-grid, .content-grid.three-cols, #review-slide .content-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.2rem;
+      }
+
+      /* 縮小標題與字型 */
+      .slide h1.slide-title {
+        font-size: 1.85rem !important;
+        margin-bottom: 1rem !important;
+        line-height: 1.3;
+      }
+
+      .slide-subtitle {
+        font-size: 0.95rem !important;
+        margin-top: -0.6rem !important;
+        margin-bottom: 1.5rem !important;
+      }
+
+      /* 卡片樣式微調 */
+      .glass-card {
+        padding: 1.25rem 1.5rem !important;
+        border-radius: 1rem !important;
+      }
+
+      .card-title {
+        font-size: 1.2rem !important;
+        margin-bottom: 0.6rem !important;
+      }
+
+      .card-content ul {
+        padding-left: 1.2rem !important;
+      }
+
+      .card-content li {
+        font-size: 0.95rem !important;
+        margin-bottom: 0.5rem !important;
+        line-height: 1.5 !important;
+      }
+
+      /* 封面頁 (Slide 1) 響應式優化 */
+      .cover-title {
+        font-size: 2.2rem !important;
+        line-height: 1.25 !important;
+        margin-bottom: 1rem !important;
+      }
+
+      .cover-description {
+        font-size: 1.05rem !important;
+        margin-bottom: 2rem !important;
+        line-height: 1.5 !important;
+      }
+
+      .cover-badge {
+        font-size: 0.9rem !important;
+        margin-bottom: 1.2rem !important;
+        padding: 0.4rem 1rem !important;
+      }
+
+      .cta-button {
+        padding: 0.8rem 2.2rem !important;
+        font-size: 1.1rem !important;
+      }
+
+      /* 表格 (Slide 13) 響應式滾動 */
+      .comparison-table {
+        display: block !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      .comparison-table th, .comparison-table td {
+        padding: 0.6rem 0.8rem !important;
+        font-size: 0.9rem !important;
+        white-space: nowrap; /* 防止表格內容折行擠扁 */
+      }
+
+      /* 課程大綱時間軸 (Slide 3) 橫向滑動卡片化 */
+      .timeline {
+        justify-content: flex-start !important;
+        overflow-x: auto !important;
+        padding-bottom: 1rem !important;
+        gap: 1.5rem !important;
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+      }
+      .timeline::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+      }
+
+      .timeline-node {
+        flex-shrink: 0 !important;
+        width: 110px !important;
+      }
+
+      .timeline-dot {
+        width: 42px !important;
+        height: 42px !important;
+        font-size: 1.1rem !important;
+        margin-bottom: 0.5rem !important;
+      }
+
+      .timeline-text {
+        font-size: 0.85rem !important;
+      }
+
+      .timeline-line, .timeline-progress {
+        display: none !important; /* 隱藏手機上無法精準排版的橫線 */
+      }
+
+      /* 手勢快捷鍵小抄 (Slide 16) 單欄化 */
+      .shortcut-list {
+        grid-template-columns: 1fr !important;
+        gap: 0.8rem !important;
+      }
+
+      .shortcut-item {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.4rem !important;
+        padding: 1rem !important;
+      }
+
+      .shortcut-desc {
+        font-size: 1rem !important;
+      }
+
+      .shortcut-key {
+        font-size: 0.95rem !important;
+        padding: 0.25rem 0.65rem !important;
+      }
+
+      /* 圖片高度自動適配 */
+      .slide img {
+        max-height: 45vh !important;
+        max-width: 100% !important;
+      }
+
+      /* 底部導覽列精簡 (RWD Controls) */
+      .nav-bar {
+        padding: 0.75rem 1rem !important;
+        background: rgba(11, 15, 25, 0.96) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+      }
+
+      .chapter-select {
+        padding: 0.4rem 0.75rem !important;
+        font-size: 0.85rem !important;
+        max-width: 130px !important;
+      }
+
+      .slide-counter {
+        font-size: 0.9rem !important;
+      }
+
+      .btn-nav {
+        width: 38px !important;
+        height: 38px !important;
+      }
+
+      .btn-nav svg {
+        width: 20px !important;
+        height: 20px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 氛圍背景 -->
+  <div class="ambient-glows">
+    <div class="glow-sphere glow-1"></div>
+    <div class="glow-sphere glow-2"></div>
+    <div class="glow-sphere glow-3"></div>
+  </div>
+
+  <!-- 頂部全域進度條 -->
+  <div class="global-progress-container">
+    <div class="global-progress-bar" id="progressBar"></div>
+  </div>
+
+  <div class="presentation-viewport">
+    <div class="slides-container" id="slidesContainer">
+
+      <!-- ==========================================
+           Slide 1: 封面頁
+           ========================================== -->
+      <section class="slide active" data-chapter="0">
+        <div class="cover-container">
+          <span class="cover-badge">🍎 國小教師數位增能研習</span>
+          <h1 class="cover-title">【下課花路米，暑假出發吧！】</h1>
+          <p class="cover-description">iPad 無邊記 × 完美自助旅行規劃術。一場結合生活品味與課堂數位實作的增能之旅！</p>
+          <button class="cta-button" onclick="nextSlide()">
+            開始研習之旅
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 2: 研習目標與受眾
+           ========================================== -->
+      <section class="slide" data-chapter="0">
+        <h1 class="slide-title">研習目標與設計理念</h1>
+        <div class="content-grid">
+          <div class="glass-card blue">
+            <h2 class="card-title">
+              <svg viewBox="0 0 24 24" stroke="var(--accent-blue)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><path d="m9.09 9 1-1a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>
+              </svg>
+              為什麼選擇「自助旅行」？
+            </h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>強烈共鳴</strong>：教師擁有固定寒暑假，自助旅行是充電放鬆的最佳途徑。</li>
+                <li><strong>任務導向</strong>：擺脫枯燥的工具說明，在規畫自己行程的任務中自然學會操作。</li>
+                <li><strong>學以致用</strong>：規劃旅程的同時，就是在產出個人化的研習成果。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="glass-card purple">
+            <h2 class="card-title">
+              <svg viewBox="0 0 24 24" stroke="var(--accent-purple)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>
+              </svg>
+              無邊記 (Freeform) 的優勢
+            </h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>無限畫布</strong>：突破傳統頁面限制，點子可以任意向外擴展。
+                  <a href="https://support.apple.com/zh-tw/guide/ipad/ipad9c59637d/ipados" target="_blank">[Apple 官方手冊]</a>
+                  <a href="https://mrmad.com.tw/freeform-app" target="_blank">[瘋先生16招教學]</a>
+                </li>
+                <li><strong>多媒體相容</strong>：網頁、影片、圖片、PDF 全數拖放即讀。</li>
+                <li><strong>即時協同</strong>：多人連線、同步編輯，是團體備課與分組討論的神器。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 3: 課程大綱
+           ========================================== -->
+      <section class="slide" data-chapter="0">
+        <h1 class="slide-title">課程大綱地圖</h1>
+        <p class="slide-subtitle">今天我們將解鎖的四大核心單元與課堂教學轉移</p>
+        <div class="timeline">
+          <div class="timeline-line"></div>
+          <div class="timeline-progress" id="timelineProgress"></div>
+          
+          <div class="timeline-node active" onclick="goToSlide(3)">
+            <div class="timeline-dot">1</div>
+            <div class="timeline-text">🎒 心靈地圖</div>
+          </div>
+          <div class="timeline-node" onclick="goToSlide(6)">
+            <div class="timeline-dot">2</div>
+            <div class="timeline-text">✈️ 飛向世界</div>
+          </div>
+          <div class="timeline-node" onclick="goToSlide(9)">
+            <div class="timeline-dot">3</div>
+            <div class="timeline-text">🗺️ 在地行程</div>
+          </div>
+          <div class="timeline-node" onclick="goToSlide(13)">
+            <div class="timeline-dot">4</div>
+            <div class="timeline-text">🏨 住宿協作</div>
+          </div>
+          <div class="timeline-node" onclick="goToSlide(17)">
+            <div class="timeline-dot">5</div>
+            <div class="timeline-text">💡 快速小抄</div>
+          </div>
+          <div class="timeline-node" onclick="goToSlide(18)">
+            <div class="timeline-dot">6</div>
+            <div class="timeline-text">🎓 核心複習</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 4: 單元一 - 旅行 Tips
+           ========================================== -->
+      <section class="slide" data-chapter="1">
+        <h1 class="slide-title">單元一：旅行起點與四大支柱</h1>
+        <p class="slide-subtitle">在出發之前，用結構化思維為旅程定錨</p>
+        <div class="content-grid">
+          <div class="glass-card">
+            <h2 class="card-title" style="color:var(--accent-blue)">
+              <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+              國家與天數
+            </h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>目的地選擇</strong>：決定國家是首要條件，這關係到文化偏好、語言熟悉度與氣候季節。</li>
+                <li><strong>天數規劃</strong>：天數決定了行程的深度。亞洲鄰近國家推薦 5-7 天；歐美長途旅行則建議 10-14 天以上。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="glass-card">
+            <h2 class="card-title" style="color:var(--accent-orange)">
+              <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              經費與目的
+            </h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>概算預算</strong>：包含機票大宗、每日住宿平均費用、餐飲與購物，留 10-20% 作為緊急備用金。</li>
+                <li><strong>旅遊目的</strong>：確定這趟旅行想獲得什麼？深度歷史文化、純放鬆度假、或是以購物美食為核心。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 5: 單元一 - 無邊記實作
+           ========================================== -->
+      <section class="slide" data-chapter="1">
+        <h1 class="slide-title">實作：繪製你的「旅行起點」</h1>
+        <div class="content-grid">
+          <div class="glass-card blue">
+            <h2 class="card-title">無邊記操作步驟與教學</h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>便利貼寫靈感</strong>：點擊工具列的 **[便利貼]**，輸入目標國家（例如：日本東京），更換便利貼顏色分類。</li>
+                <li><strong>手寫筆刷標記</strong>：選擇 **[筆刷工具]** 用 Apple Pencil 或是手指在畫布上塗鴉、圈出重點。</li>
+                <li><strong>自由縮放</strong>：兩指張合，將版面放大以補充細節，或縮小以綜觀全局。</li>
+              </ul>
+            </div>
+          </div>
+          <!-- 互動圖卡：無邊記白板模擬 -->
+          <div class="visual-card-container">
+            <div class="freeform-board-mockup">
+              <div class="sticky-note sticky-yellow">🇯🇵 日本東京</div>
+              <div class="sticky-note sticky-blue">✈️ 預算 5 萬</div>
+              <div class="sticky-note sticky-pink">🌸 放鬆之旅</div>
+              <div class="sticky-note sticky-green">📅 7 天自由行</div>
+              <svg style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;">
+                <path d="M110,65 Q130,110 100,140" fill="none" stroke="var(--accent-orange)" stroke-width="2.5" stroke-dasharray="5 5" />
+                <path d="M190,75 Q210,130 250,150" fill="none" stroke="var(--accent-blue)" stroke-width="2.5" stroke-dasharray="5 5" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 6: 單元一 - 教室教學應用 (獨立出來)
+           ========================================== -->
+      <section class="slide" data-chapter="1">
+        <h1 class="slide-title">教學應用：課堂腦力激盪板</h1>
+        <p class="slide-subtitle">將「無限延伸白板」轉移應用到小學各領域教學中</p>
+        <div class="content-grid">
+          <div class="glass-card purple">
+            <h2 class="card-title">
+              <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zm20 0h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              課堂教學情境設計
+            </h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>語音/國語課</strong>：進行「課文角色性格分析」或寫作大綱發想。老師在無邊記中央寫下主題，學生以不同顏色的便利貼寫下想法。</li>
+                <li><strong>社會課討論</strong>：在「探討家鄉特色」或「環境議題」時，用筆刷在畫布上將零散的便利貼進行圈選歸類，建立心智圖結構。</li>
+                <li><strong>學生個人心智圖</strong>：引導中高年級孩子使用 iPad 繪製自己學習單元的「知識整理地圖」，提升後設認知。</li>
+              </ul>
+            </div>
+          </div>
+          <!-- 教室應用手繪感卡片 -->
+          <div class="visual-card-container">
+            <div class="edu-visual-card">
+              <div class="edu-icon-container">
+                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>
+              </div>
+              <div class="edu-visual-title">小組腦力激盪討論板</div>
+              <div class="edu-visual-desc">用顏色區分各組論點，在無限大畫布上快速分類點子，學生參與度 100%！</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 7: 單元二 - 旅行 Tips
+           ========================================== -->
+      <section class="slide" data-chapter="2">
+        <h1 class="slide-title">單元二：機票、保險與簽證準備</h1>
+        <p class="slide-subtitle">打造安心旅遊的骨架，避開常見的訂票陷阱</p>
+        <div class="content-grid">
+          <div class="glass-card">
+            <h2 class="card-title" style="color:var(--accent-blue)">
+              <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+              機票比價與 OTA 避坑
+            </h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>比價網站</strong>：利用 <a href="https://www.skyscanner.com.tw" target="_blank">Skyscanner 比價網</a> 或 <a href="https://www.google.com/travel/flights" target="_blank">Google Flights</a> 查詢歷史價格以鎖定便宜區間。</li>
+                <li><strong>★ 避坑要點</strong>：儘量在官網訂票。若要找 OTA (線上旅行社)，**務必選擇能提供中文客服的平台** (如 Klook, Trip.com)；**切勿使用歐洲中小型 OTA**，否則遇到航班取消時，將面臨語言隔閡且求助無門的困局！</li>
+              </ul>
+            </div>
+          </div>
+          <div class="glass-card">
+            <h2 class="card-title" style="color:var(--accent-green)">
+              <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              簽證與旅遊平安險
+            </h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>外交部網站查詢</strong>：出發前至「<a href="https://www.boca.gov.tw" target="_blank">外交部領事事務局全球資訊網</a>」確認目的地簽證政策與公告。</li>
+                <li><strong>出國登錄</strong>：在外交部網站登錄行程，遇天災或緊急事故能獲得政府及時協助。</li>
+                <li><strong>旅遊平安險</strong>：必須包含海外醫療與緊急救援。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 8: 單元二 - 無邊記實作
+           ========================================== -->
+      <section class="slide" data-chapter="2">
+        <h1 class="slide-title">實作：出國資訊看板與超連結</h1>
+        <div class="content-grid">
+          <div class="glass-card blue">
+            <h2 class="card-title">無邊記操作步驟與教學</h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>插入網頁預覽</strong>：點擊 **[插入]** > **[連結]**，輸入外交部官網或 Skyscanner 比價連結。無邊記會自動生成「網頁預覽卡片」。</li>
+                <li><strong>加入文字方塊</strong>：雙擊輸入保單編號、緊急聯絡電話等文字。</li>
+                <li><strong>線條與連接線</strong>：使用 **[形狀]** > **[線條]** 連接機票與簽證卡片，使資訊邏輯井然有序。</li>
+              </ul>
+            </div>
+          </div>
+          <!-- 互動圖卡：網頁預覽卡片模擬 -->
+          <div class="visual-card-container">
+            <div class="link-card-mockup">
+              <div class="web-preview-card" onclick="window.open('https://www.skyscanner.com.tw', '_blank')">
+                <div class="web-preview-img">✈️</div>
+                <div class="web-preview-info">
+                  <div class="web-preview-title">Skyscanner | 便宜機票比價</div>
+                  <div class="web-preview-desc">https://www.skyscanner.com.tw</div>
+                </div>
+              </div>
+              <div style="margin-top: 1rem; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 0.75rem; text-align: center; font-size: 0.9rem; color: var(--accent-green);">
+                🔗 已連結至機票比價與外交部資訊
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 9: 單元二 - 教室教學應用 (獨立出來)
+           ========================================== -->
+      <section class="slide" data-chapter="2">
+        <h1 class="slide-title">教學應用：主題探究 PBL 資料庫</h1>
+        <p class="slide-subtitle">引導學生在小組探究中，建立結構化的網路資料整理力</p>
+        <div class="content-grid">
+          <div class="glass-card purple">
+            <h2 class="card-title">
+              <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              課堂教學情境設計
+            </h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>主題探究收集</strong>：在進行如「全球氣候變遷」或「世界文化探究」主題時，引導孩子們把相關新聞、影片與文獻生成網頁連結預覽。</li>
+                <li><strong>文獻脈絡串聯</strong>：學生可以利用「連接線」將各個資料庫連結在一起。例如把「溫室效應成因（文章）」連接到「冰山融化（影片）」。</li>
+                <li><strong>避免資訊雜亂</strong>：無邊記的連結預覽卡片既美觀又不占空間，非常適合當成整組的「PBL 探究資料夾」。</li>
+              </ul>
+            </div>
+          </div>
+          <!-- 教室應用手繪感卡片 -->
+          <div class="visual-card-container">
+            <div class="edu-visual-card">
+              <div class="edu-icon-container" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);">
+                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zm20 0h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              </div>
+              <div class="edu-visual-title">PBL 主題研究資料夾</div>
+              <div class="edu-visual-desc">貼上網址即生成卡片，拉上連接線說明前因後果，讓小學生的專題報告擁有清晰的學術脈絡！</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 10: 單元三 - 旅行 Tips
+           ========================================== -->
+      <section class="slide" data-chapter="3">
+        <h1 class="slide-title">單元三：行程規劃與當地票券挑選</h1>
+        <p class="slide-subtitle">深入當地人的生活，智慧搜集排程靈感</p>
+        <div class="content-grid">
+          <div class="glass-card">
+            <h2 class="card-title" style="color:var(--accent-purple)">
+              <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+              社群與影音資訊搜集
+            </h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>影音攻略</strong>：在 YouTube 搜尋「[國名/城市] + 自助旅行」，利用 15-20 分鐘的精華影片快速建立地理觀念。</li>
+                <li><strong>社團問答</strong>：加入臉書自助旅行社團，搜尋最新的過關流程與交通狀況等即時情報。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="glass-card">
+            <h2 class="card-title" style="color:var(--accent-pink)">
+              <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="12" r="3"/></svg>
+              一日遊票券與向量地圖
+            </h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>平台比價</strong>：利用 <a href="https://www.klook.com" target="_blank">Klook 票券平台</a> 或 <a href="https://www.kkday.com" target="_blank">KKday 票券平台</a> 預先訂購一日券或景點門票，比現場買便宜且省去排隊時間。</li>
+                <li><strong>郊區一日遊</strong>：若交通不便（如去富士山、河口湖），可訂一日遊巴士行程，省心又便利。</li>
+                <li><strong>地圖定位</strong>：搭配 Mapple Vector Style 向量地圖工具了解景點距離。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 11: 單元三 - 無邊記實作
+           ========================================== -->
+      <section class="slide" data-chapter="3">
+        <h1 class="slide-title">實作：視覺化行程看板</h1>
+        <div class="content-grid">
+          <div class="glass-card blue">
+            <h2 class="card-title">無邊記操作步驟與教學</h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>多媒體檔案導入</strong>：直接拖放各大旅行社的行程 PDF、部落客手繪地圖截圖進無邊記。</li>
+                <li><strong>PDF 即時預覽</strong>：在畫布上雙擊 PDF，即可原地上下滾動翻頁，不必另外開啟 PDF 閱讀程式。</li>
+                <li><strong>使用箭頭引導</strong>：在 **[形狀]** 裡搜尋「箭頭」或「飛機」，將 Day 1、Day 2 等景點依序相連，製作直觀的路線圖。</li>
+              </ul>
+            </div>
+          </div>
+          <!-- 互動圖卡：地圖與車票模擬 -->
+          <div class="visual-card-container">
+            <div class="ticket-map-mockup">
+              <div class="mock-map">
+                <div class="mock-pin pin-1"></div>
+                <div class="mock-pin pin-2"></div>
+                <div style="position: absolute; bottom: 10px; left: 10px; font-size: 0.8rem; background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 4px; color: var(--accent-blue);">
+                  🗺️ 路線導引中
+                </div>
+              </div>
+              <div class="mock-ticket" onclick="window.open('https://www.klook.com', '_blank')">
+                <div style="font-weight: 800; font-size: 0.9rem;">Klook PASS</div>
+                <div style="font-size: 0.7rem; opacity: 0.8;">景點一日通票</div>
+                <div style="font-size: 0.9rem; font-family: monospace; border-top: 1px dashed rgba(255,255,255,0.3); padding-top: 5px; text-align: center;">
+                  🎟️ 點擊預訂
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 12: 單元三 - 教室教學應用 (獨立出來)
+           ========================================== -->
+      <section class="slide" data-chapter="3">
+        <h1 class="slide-title">教學應用：校外教學行前準備板</h1>
+        <p class="slide-subtitle">將混亂的行前通知與路線圖，整合為家長與學生一目了然的數位指南</p>
+        <div class="content-grid">
+          <div class="glass-card purple">
+            <h2 class="card-title">
+              <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 8v4l3 3"/></svg>
+              課堂教學情境設計
+            </h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>一站式行前說明</strong>：將參訪景點地圖、集合點相片、Klook / 高鐵電子車票截圖整理在同一個無邊記畫布上。</li>
+                <li><strong>PDF 手冊直接翻頁</strong>：將「學生安全須知手冊 PDF」置入畫布，老師在課堂上投影，直接於白板中雙擊並翻頁向全班說明，不需跳轉 App。</li>
+                <li><strong>親師會指引</strong>：直接將此畫布輸出為 PDF 發給家長，讓家長能精準掌握校外教學當天的移動路線與安全集合時間。</li>
+              </ul>
+            </div>
+          </div>
+          <!-- 教室應用手繪感卡片 -->
+          <div class="visual-card-container">
+            <div class="edu-visual-card">
+              <div class="edu-icon-container" style="background: rgba(52, 211, 153, 0.15); color: var(--accent-green); box-shadow: 0 0 15px rgba(52, 211, 153, 0.2);">
+                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="12" r="3"/></svg>
+              </div>
+              <div class="edu-visual-title">校外教學視覺化指南</div>
+              <div class="edu-visual-desc">結合地圖、高鐵票券、集合照片與安全須知，整個校外教學流程都在一塊大畫布中一覽無遺！</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 12 (New): 單元三 - 特別加碼資源
+           ========================================== -->
+      <section class="slide" data-chapter="3">
+        <h1 class="slide-title">【特別加碼】2026 全球百國旅遊參考指南 PDF</h1>
+        <p class="slide-subtitle">400MB 終極包！結合無邊記打造最強個人隨身旅行手冊</p>
+        <div class="content-grid">
+          <div class="glass-card blue">
+            <h2 class="card-title">
+              <svg viewBox="0 0 24 24" stroke="var(--accent-blue)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+              </svg>
+              💡 百國 PDF 實用內容大公開
+            </h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>全球百國覆蓋</strong>：包含各國出入境政策、免簽與落地簽規定、最新安全警示。</li>
+                <li><strong>在地實用指南</strong>：出國插頭電壓規格、主要貨幣匯率、當地報警與急難救助電話。</li>
+                <li><strong>高清隨身手冊</strong>：409MB 超清晰 PDF 檔，即使在 iPad 上放大數倍，文字與圖表細節依然銳利。</li>
+              </ul>
+              <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                <a href="https://drive.google.com/file/d/1G7g8wkopSUiFetQhSjRXOxmOBFyBctdH/view?usp=sharing" target="_blank" class="cta-button" style="padding: 0.8rem 2rem; font-size: 1.1rem; background: var(--grad-blue); box-shadow: 0 8px 20px rgba(14, 165, 233, 0.35);">
+                  <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="width: 1.3rem; height: 1.3rem;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  開啟 PDF 檔案
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="glass-card purple">
+            <h2 class="card-title">
+              <svg viewBox="0 0 24 24" stroke="var(--accent-purple)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><path d="m9.09 9 1-1a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>
+              </svg>
+              📲 無邊記 (Freeform) 實戰挑戰
+            </h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>一鍵拖放置入</strong>：直接將本機 `2026百國PDF.pdf` 拖入你的 iPad 無邊記畫布中。</li>
+                <li><strong>原地雙擊翻頁</strong>：免切換 App！直接在白板畫布中原地上下翻閱這份 400 頁的厚重指南。</li>
+                <li><strong>局部裁切與拼貼</strong>：利用無邊記的「裁切」工具，只留下你要去國家的那一頁，精簡你的畫布。</li>
+                <li><strong>手寫標記與便利貼</strong>：用 Apple Pencil 在 PDF 旁圈出重點，甚至手繪插頭形狀，製成個人「出國救急便利貼」。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 13: 單元四 - 旅行 Tips
+           ========================================== -->
+      <section class="slide" data-chapter="4">
+        <h1 class="slide-title">單元四：今晚住哪裡？住宿挑選</h1>
+        <p class="slide-subtitle">選擇合適的港灣，為旅途補充電力</p>
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>住宿類型</th>
+              <th>優點</th>
+              <th>缺點</th>
+              <th>適合受眾</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>商務旅館 (如 <a href="https://www.toyoko-inn.com/china/" target="_blank">東橫INN</a>)</strong></td>
+              <td>交通極佳、附免費早餐、價格穩定</td>
+              <td>房間較狹小、擺設較單一</td>
+              <td>注重CP值、追求便利的老師</td>
+            </tr>
+            <tr>
+              <td><strong>青年旅館 (上下舖)</strong></td>
+              <td>價格極便宜、可與各國旅人交流</td>
+              <td>需共用衛浴、較無私人隱私</td>
+              <td>單人背包客、樂於探索社交者</td>
+            </tr>
+            <tr>
+              <td><strong>公寓式酒店</strong></td>
+              <td>空間大、附小廚房與洗衣機</td>
+              <td>通常無每日清潔、價格稍高</td>
+              <td>家庭旅遊、親子同遊、長途旅人</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ==========================================
+           Slide 14: 單元四 - 無邊記實作
+           ========================================== -->
+      <section class="slide" data-chapter="4">
+        <h1 class="slide-title">實作：表格比對與多人協同</h1>
+        <div class="content-grid">
+          <div class="glass-card blue">
+            <h2 class="card-title">無邊記操作步驟與教學</h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>建立對比表格</strong>：點擊 **[表格]**，輸入飯店名稱、價格、離地鐵站步行時間，進行客觀比對。</li>
+                <li><strong>多人即時協作</strong>：點擊右上角 **[分享]**，將權限設為「任何人只要擁有連結即可編輯」，用 LINE 發送給旅伴。</li>
+                <li><strong>共編與即時決策</strong>：你可以與旅伴同時在線修改畫布、拖拉相片，即便分隔兩地也能完美討論行程。</li>
+              </ul>
+            </div>
+          </div>
+          <!-- 互動圖卡：多人協作模擬 -->
+          <div class="visual-card-container">
+            <div class="collaboration-mockup">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; color: white;">
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: bold;">
+                  <td style="padding: 5px;">飯店</td>
+                  <td style="padding: 5px;">價格/晚</td>
+                  <td style="padding: 5px;">步行</td>
+                </tr>
+                <tr>
+                  <td style="padding: 5px;">東橫 INN</td>
+                  <td style="padding: 5px; color: var(--accent-green);">NT$ 2,400</td>
+                  <td style="padding: 5px;">3 分鐘</td>
+                </tr>
+                <tr>
+                  <td style="padding: 5px;">青年旅館</td>
+                  <td style="padding: 5px; color: var(--accent-green);">NT$ 900</td>
+                  <td style="padding: 5px;">8 分鐘</td>
+                </tr>
+              </table>
+              <div class="collab-user collab-user-1">陳老師 ✏️</div>
+              <div class="collab-user collab-user-2">林老師 ✏️</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 15 (New): 單元四 - 特別加碼資源
+           ========================================== -->
+      <section class="slide" data-chapter="4" id="hotel-english-slide">
+        <h1 class="slide-title">【特別加碼】自助旅行必備！飯店實戰英語 10 句</h1>
+        <p class="slide-subtitle">複製貼上到你的無邊記畫布中，打造最貼心的出國英語隨身小抄</p>
+        <div class="content-grid">
+          <div class="glass-card blue">
+            <h2 class="card-title">
+              <svg viewBox="0 0 24 24" stroke="var(--accent-blue)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              🛎️ 前台溝通與入住篇
+            </h2>
+            <div class="card-content">
+               <ul style="list-style-type: none; padding-left: 0;">
+                 <li style="margin-bottom: 0.8rem; line-height: 1.6;"><strong>① 辦理入住</strong>：<button class="speak-btn" onclick="speakText(this, 'Hi, I\'d like to check in, please. My name is name.')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg></button>Hi, I'd like to check in, please. My name is [Name].<br><span style="color: var(--text-secondary); font-size: 0.95rem;">（你好，我想辦理入住。我的名字是...）</span></li>
+                 <li style="margin-bottom: 0.8rem; line-height: 1.6;"><strong>② 寄放行李</strong>：<button class="speak-btn" onclick="speakText(this, 'Can I leave my luggage here before check-in or after check-out?')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg></button>Can I leave my luggage here before check-in / after check-out?<br><span style="color: var(--text-secondary); font-size: 0.95rem;">（入住前/退房後我可以把行李寄放在這裡嗎？）</span></li>
+                 <li style="margin-bottom: 0.8rem; line-height: 1.6;"><strong>③ 提早入住</strong>：<button class="speak-btn" onclick="speakText(this, 'Is it possible to check in early?')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg></button>Is it possible to check in early?<br><span style="color: var(--text-secondary); font-size: 0.95rem;">（有可能提早入住嗎？）</span></li>
+                 <li style="margin-bottom: 0.8rem; line-height: 1.6;"><strong>④ 確認早餐</strong>：<button class="speak-btn" onclick="speakText(this, 'Is breakfast included? What time is it served?')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg></button>Is breakfast included? What time is it served?<br><span style="color: var(--text-secondary); font-size: 0.95rem;">（有含早餐嗎？早餐幾點供應？）</span></li>
+                 <li style="margin-bottom: 0.4rem; line-height: 1.6;"><strong>⑤ 詢問 Wi-Fi</strong>：<button class="speak-btn" onclick="speakText(this, 'What is the Wi-Fi password?')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg></button>What is the Wi-Fi password?<br><span style="color: var(--text-secondary); font-size: 0.95rem;">（Wi-Fi 密碼是什麼？）</span></li>
+               </ul>
+             </div>
+           </div>
+           <div class="glass-card purple">
+             <h2 class="card-title">
+               <svg viewBox="0 0 24 24" stroke="var(--accent-purple)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                 <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+               </svg>
+               🛠️ 房內求助與退房篇
+             </h2>
+             <div class="card-content">
+               <ul style="list-style-type: none; padding-left: 0;">
+                 <li style="margin-bottom: 0.8rem; line-height: 1.6;"><strong>⑥ 要求備品</strong>：<button class="speak-btn" onclick="speakText(this, 'Could we get some extra towels or toiletries, please?')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg></button>Could we get some extra towels / toiletries, please?<br><span style="color: var(--text-secondary); font-size: 0.95rem;">（可以給我們一些額外的毛巾/盥洗用品嗎？）</span></li>
+                 <li style="margin-bottom: 0.8rem; line-height: 1.6;"><strong>⑦ 設備報修</strong>：<button class="speak-btn" onclick="speakText(this, 'The air conditioning or hot water in my room isn\'t working.')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg></button>The air conditioning / hot water in my room isn't working.<br><span style="color: var(--text-secondary); font-size: 0.95rem;">（我房間的冷氣/熱水壞掉了。）</span></li>
+                 <li style="margin-bottom: 0.8rem; line-height: 1.6;"><strong>⑧ 週邊推薦</strong>：<button class="speak-btn" onclick="speakText(this, 'Could you recommend a good local restaurant nearby?')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg></button>Could you recommend a good local restaurant nearby?<br><span style="color: var(--text-secondary); font-size: 0.95rem;">（您能推薦這附近好吃的在地餐廳嗎？）</span></li>
+                 <li style="margin-bottom: 0.8rem; line-height: 1.6;"><strong>⑨ 延遲退房</strong>：<button class="speak-btn" onclick="speakText(this, 'Is it possible to have a late check-out? Is there a fee?')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg></button>Is it possible to have a late check-out? Is there a fee?<br><span style="color: var(--text-secondary); font-size: 0.95rem;">（可以延遲退房嗎？需要收費嗎？）</span></li>
+                 <li style="margin-bottom: 0.4rem; line-height: 1.6;"><strong>⑩ 辦理退房</strong>：<button class="speak-btn" onclick="speakText(this, 'I\'d like to check out. Thank you for your help.')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg></button>I'd like to check out. Thank you for your help.<br><span style="color: var(--text-secondary); font-size: 0.95rem;">（我想辦理退房，謝謝您的協助。）</span></li>
+               </ul>
+             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 16: 單元四 - 教室教學應用 (獨立出來)
+           ========================================== -->
+      <section class="slide" data-chapter="4">
+        <h1 class="slide-title">教學應用：跨領域教師協同備課</h1>
+        <p class="slide-subtitle">突破時空限制，打造同年級或學科教師的「即時靈感討論板」</p>
+        <div class="content-grid">
+          <div class="glass-card purple">
+            <h2 class="card-title">
+              <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              課堂教學情境設計
+            </h2>
+            <div class="card-content">
+              <ul>
+                <li><strong>多人線上即時備課</strong>：期初或期末老師們需要跨學科協同備課（如設計「端午立蛋與物理重力」專題）。組長發起共享白板，大家同時加入共編。</li>
+                <li><strong>素材一鍵置入與串聯</strong>：國文老師貼上詩詞文字，自然老師上傳實驗 PDF。大家在線上用語音開會的同時，一邊拖拉教材排版，即時產出完整跨領域教案。</li>
+                <li><strong>班級分組合作學習</strong>：在教室中，將學生分組，每組發送一個共享的無邊記連結。組員能即時合力完成組內心智圖與報告，老師還能隨時進入各組畫布進行「線上巡堂與修改」。</li>
+              </ul>
+            </div>
+          </div>
+          <!-- 教室應用手繪感卡片 -->
+          <div class="visual-card-container">
+            <div class="edu-visual-card">
+              <div class="edu-icon-container" style="background: rgba(251, 146, 60, 0.15); color: var(--accent-orange); box-shadow: 0 0 15px rgba(251, 146, 60, 0.2);">
+                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+              </div>
+              <div class="edu-visual-title">跨學科線上共編白板</div>
+              <div class="edu-visual-desc">老師們在各自辦公室即可在同一白板上拉線備課；亦可應用於小組分組，合力完成小組學習成果！</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 16: 無邊記操作小抄
+           ========================================== -->
+      <section class="slide" data-chapter="5">
+        <h1 class="slide-title">iPad 無邊記操作手勢小抄</h1>
+        <p class="slide-subtitle">熟記這幾招，操作效率加倍！</p>
+        <div class="shortcut-list">
+          <div class="shortcut-item">
+            <span class="shortcut-desc">快速複製元件</span>
+            <span class="shortcut-key">拖移時點按另一指</span>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">框選多個物件</span>
+            <span class="shortcut-key">手指按住畫布拖移</span>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">重疊物件排序（置前/置後）</span>
+            <span class="shortcut-key">點選物件 > 排列</span>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">匯出成隨身旅行指南</span>
+            <span class="shortcut-key">點按名稱 > 輸出為 PDF</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 17: 核心複習圖卡
+           ========================================== -->
+      <section class="slide" data-chapter="6" id="review-slide">
+        <h1 class="slide-title">研習核心大複習：無邊記旅遊地圖</h1>
+        <p class="slide-subtitle">用這張圖卡複習今天的全部精髓，歡迎老師拍照保存！</p>
+        <div class="content-grid" style="align-items: center;">
+          <!-- 嵌入生成的高品質複習圖卡 -->
+          <div style="display: flex; justify-content: center; align-items: center;">
+            <img src="review_infographic.png" alt="無邊記與自助旅行複習圖卡" style="width: 100%; max-width: 580px; border-radius: 1rem; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.1); transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+          </div>
+          <!-- 磨砂玻璃大綱重點整理 -->
+          <div class="glass-card purple">
+            <h2 class="card-title">💡 旅遊規劃 4 大黃金公式</h2>
+            <div class="card-content">
+              <ul style="font-size: 1.1rem; line-height: 1.7;">
+                <li style="margin-bottom: 0.9rem;"><strong>① 起點定錨（單元一）</strong>：天數 + 預算 + 目的。利用 **便利貼** 與 **筆刷** 圈出靈感。
+                  <br><span style="color: var(--accent-blue); font-size: 0.95rem;">👉 課堂延伸：班級討論與腦力激盪板。</span>
+                </li>
+                <li style="margin-bottom: 0.9rem;"><strong>② 資訊整合（單元二）</strong>：官網訂票 + 中文 OTA。善用 **網頁連結卡片** 與 **連接線** 串聯。
+                  <br><span style="color: var(--accent-green); font-size: 0.95rem;">👉 課堂延伸：PBL 探究學習資料庫。</span>
+                </li>
+                <li style="margin-bottom: 0.9rem;"><strong>③ 行程視覺（單元三）</strong>：部落格 PDF + Klook/KKday。使用 **PDF 原地預覽** 與 **內建形狀箭頭** 導引。
+                  <br><span style="color: var(--accent-orange); font-size: 0.95rem;">👉 課堂延伸：校外教學行前安全路線板。</span>
+                </li>
+                <li style="margin-bottom: 0.4rem;"><strong>④ 多人共編（單元四）</strong>：訂房分析對比。建立 **對比表格** 並開啟 **共享編輯** 即時協作。
+                  <br><span style="color: var(--accent-pink); font-size: 0.95rem;">👉 課堂延伸：同年級跨學科教師共同備課。</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Slide 18: 結語與 QA
+           ========================================== -->
+      <section class="slide" data-chapter="6">
+        <div class="cover-container">
+          <span class="cover-badge" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.25); color: var(--accent-green)">✨ 預祝旅途愉快</span>
+          <h1 class="cover-title" style="background: linear-gradient(135deg, #ffffff 40%, #a7f3d0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">下課花路米，即刻出發！</h1>
+          <p class="cover-description">希望各位老師都能利用「無邊記」規劃出一趟完美的暑假自助旅行，並在新的學期，把這個超好用的無限白板帶進教室，豐富孩子們的課堂體驗！</p>
+          <button class="cta-button" style="background: var(--grad-green); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3)" onclick="goToSlide(0)">
+            回首頁
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- 底部導覽列 -->
+  <div class="nav-bar">
+    <div class="slide-counter">
+      <span id="currentSlideNum">1</span> / <span id="totalSlidesNum">20</span>
+    </div>
+    
+    <select class="chapter-select" id="chapterSelect" onchange="onChapterSelect(this)">
+      <option value="0">研習簡介 & 大綱</option>
+      <option value="3">單元一：起點定錨</option>
+      <option value="6">單元二：出國準備</option>
+      <option value="9">單元三：行程預訂</option>
+      <option value="13">單元四：住宿協作</option>
+      <option value="17">精選小抄 & 複習</option>
+    </select>
+
+    <div class="control-buttons">
+      <button class="btn-nav" id="btnPrev" onclick="prevSlide()" disabled>
+        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </button>
+      <button class="btn-nav" id="btnNext" onclick="nextSlide()">
+        <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="gesture-hint">
+    <span>← / → 鍵或空白鍵切換</span>
+  </div>
+
+  <!-- ==========================================================================
+     9. 互動 JS 控制邏輯 (Interactive Presentation Logic)
+     ========================================================================== -->
+  <script>
+    const container = document.getElementById('slidesContainer');
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentIndex = 0;
+
+    // 初始化頁數顯示
+    document.getElementById('totalSlidesNum').textContent = totalSlides;
+
+    // 更新簡報狀態
+    function updatePresentation() {
+      // 切換頁面時停止語音播放，並清除所有喇叭按鈕的播放中狀態
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+      document.querySelectorAll('.speak-btn').forEach(b => b.classList.remove('speaking'));
+
+      // 1. 滑動幻燈片容器
+      container.style.transform = `translateX(-${currentIndex * 100}vw)`;
+      
+      // 2. 切換 active class
+      slides.forEach((slide, idx) => {
+        if (idx === currentIndex) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      // 3. 更新計數器
+      document.getElementById('currentSlideNum').textContent = currentIndex + 1;
+
+      // 4. 控制按鈕狀態
+      document.getElementById('btnPrev').disabled = currentIndex === 0;
+      document.getElementById('btnNext').disabled = currentIndex === totalSlides - 1;
+
+      // 5. 更新頂部進度條
+      const progressPercent = (currentIndex / (totalSlides - 1)) * 100;
+      document.getElementById('progressBar').style.width = `${progressPercent}%`;
+
+      // 6. 更新第三頁的時間軸進度條 (Timeline)
+      const timelineProgress = document.getElementById('timelineProgress');
+      if (timelineProgress) {
+        if (currentIndex === 2) {
+          timelineProgress.style.width = '0%';
+          setTimeout(() => {
+            timelineProgress.style.width = '100%';
+          }, 300);
+        } else if (currentIndex < 2) {
+          timelineProgress.style.width = '0%';
+        } else {
+          timelineProgress.style.width = '100%';
+        }
+      }
+
+      // 同步更新時間軸上的節點 active 狀態 (對齊 20 頁的新頁索引)
+      const timelineNodes = document.querySelectorAll('.timeline-node');
+      if (timelineNodes.length > 0) {
+        timelineNodes.forEach((node, idx) => {
+          // 對應大綱頁面上的六個節點：單元一(3)、單元二(6)、單元三(9)、單元四(13)、小抄(17)、複習(18)
+          const slideIndices = [3, 6, 9, 13, 17, 18];
+          if (currentIndex === slideIndices[idx]) {
+            node.classList.add('active');
+          } else {
+            node.classList.remove('active');
+          }
+        });
+      }
+
+      // 7. 同步下拉選單
+      const chapterSelect = document.getElementById('chapterSelect');
+      let targetOptionValue = "0";
+      
+      if (currentIndex >= 17) {
+        targetOptionValue = "17"; // 指向「精選小抄 & 複習」單元
+      } else if (currentIndex >= 13) {
+        targetOptionValue = "13";
+      } else if (currentIndex >= 9) {
+        targetOptionValue = "9";
+      } else if (currentIndex >= 6) {
+        targetOptionValue = "6";
+      } else if (currentIndex >= 3) {
+        targetOptionValue = "3";
+      } else {
+        targetOptionValue = "0";
+      }
+      
+      chapterSelect.value = targetOptionValue;
+    }
+
+    // 下一頁
+    function nextSlide() {
+      if (currentIndex < totalSlides - 1) {
+        currentIndex++;
+        updatePresentation();
+      }
+    }
+
+    // 上一頁
+    function prevSlide() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updatePresentation();
+      }
+    }
+
+    // 跳轉到指定頁
+    function goToSlide(index) {
+      if (index >= 0 && index < totalSlides) {
+        currentIndex = index;
+        updatePresentation();
+      }
+    }
+
+    // 當下拉選單變更時
+    function onChapterSelect(selectElem) {
+      const targetIndex = parseInt(selectElem.value, 10);
+      goToSlide(targetIndex);
+    }
+
+    // 鍵盤快速鍵監聽
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === ' ' || event.key === 'Spacebar') {
+        event.preventDefault();
+        nextSlide();
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        prevSlide();
+      }
+    });
+
+    // 滑鼠滾輪切換 (防抖動)
+    let lastWheelTime = 0;
+    document.addEventListener('wheel', (event) => {
+      const now = Date.now();
+      if (now - lastWheelTime < 1000) return;
+      
+      if (event.deltaY > 50) {
+        nextSlide();
+        lastWheelTime = now;
+      } else if (event.deltaY < -50) {
+        prevSlide();
+        lastWheelTime = now;
+      }
+    });
+
+    // 支援觸控螢幕滑動 (iPad 等平板設備)
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, false);
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, false);
+
+    function handleSwipe() {
+      const swipeThreshold = 50;
+      if (touchStartX - touchEndX > swipeThreshold) {
+        nextSlide();
+      } else if (touchEndX - touchStartX > swipeThreshold) {
+        prevSlide();
+      }
+    }
+
+    // 飯店英語發音邏輯 (Web Speech API)
+    function speakText(btn, text) {
+      if (!window.speechSynthesis) {
+        alert("抱歉，您的瀏覽器不支援語音合成功能。");
+        return;
+      }
+      
+      // 取消目前正在播放的語音
+      window.speechSynthesis.cancel();
+      
+      // 移除所有按鈕的 speaking class
+      document.querySelectorAll('.speak-btn').forEach(b => b.classList.remove('speaking'));
+      
+      // 加上 speaking class 以顯示播放中動畫
+      btn.classList.add('speaking');
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.85; // 稍微放慢，便於教學聽力
+      
+      utterance.onend = function() {
+        btn.classList.remove('speaking');
+      };
+      
+      utterance.onerror = function() {
+        btn.classList.remove('speaking');
+      };
+      
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // 初始呼叫
+    updatePresentation();
+  </script>
+</body>
+</html>
